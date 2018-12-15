@@ -1,3 +1,7 @@
+html {
+    cursor: url('./assets/pointers/Pointer.gif'), auto;
+}
+
 canvas {
     position: absolute;
     display: block;
