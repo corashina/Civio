@@ -1,6 +1,5 @@
 import Input from './input';
 import Map from './map';
-import Sprite from './sprite';
 
 class App { }
 
@@ -18,6 +17,8 @@ App.prototype.init = function () {
   plane.position.y -= 100;
   this.scene.add(plane);
 
+  this.intersected = null;
+
   // Renderer
   this.renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('canvas'), antialias: true });
   this.renderer.shadowMap.enabled = true;
@@ -26,10 +27,7 @@ App.prototype.init = function () {
   this.raycaster = new THREE.Raycaster();
   this.mouse = new THREE.Vector2();
 
-  var map = new Map(this.scene, 10);
-
-  var spr = new Sprite(this.textureloader);
-  this.scene.add(spr.mesh);
+  this.map = new Map(this.scene, 10);
 
   this.input = new Input(this);
 
@@ -43,7 +41,9 @@ App.prototype.init = function () {
   window.addEventListener('mousemove', (e) => this.input.onMouseMove(e), false);
   window.addEventListener('keyup', (e) => this.input.onKeyUp(e), false);
   window.addEventListener('keydown', (e) => this.input.onKeyDown(e), false);
-  window.addEventListener('wheel', (e) => this.input.onWheel(e), false)
+  window.addEventListener('mousedown', (e) => this.input.onMouseDown(e, this.intersected), false);
+  window.addEventListener('mouseup', (e) => this.input.onMouseUp(e), false);
+  window.addEventListener('wheel', (e) => this.input.onWheel(e), { passive: false });
 
 }
 
@@ -68,7 +68,9 @@ App.prototype.raycast = function () {
 
   this.raycaster.setFromCamera(this.mouse, this.camera);
   let intersects = this.raycaster.intersectObjects(this.scene.children);
-  // intersects.forEach(e => console.log(e))
+  if (intersects.length > 0) {
+    if (intersects[0].object != this.intersected) this.intersected = intersects[0].object;
+  } else this.intersected = null;
 
 }
 

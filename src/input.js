@@ -9,8 +9,9 @@ Input.prototype.constructor = function (world) {
   this.zoomInLimit = 50;
   this.zoomOutLimit = 150;
 
-}
+  this.selectedTile = new THREE.Mesh();
 
+}
 
 Input.prototype.updateCamera = function () {
 
@@ -23,7 +24,7 @@ Input.prototype.updateCamera = function () {
 
 Input.prototype.onWheel = function (event) {
 
-  let direction = this.world.camera.clone().getWorldDirection().multiplyScalar(this.zoom);
+  let direction = this.world.camera.clone().getWorldDirection(new THREE.Vector3()).multiplyScalar(this.zoom);
   if (event.deltaY > 0) {
     if (this.world.camera.position.y - direction.y > this.zoomOutLimit) return;
     this.world.camera.translateZ(this.zoom)
@@ -43,6 +44,29 @@ Input.prototype.onKeyUp = function (event) {
 Input.prototype.onKeyDown = function (event) {
 
   this.keys[event.keyCode] = true;
+
+}
+
+Input.prototype.onMouseUp = function (event) {
+
+
+
+}
+
+Input.prototype.onMouseDown = function (event, e) {
+
+  // if (this.selectedTile != e) {
+  //   console.log(this.selectedTile.position.distanceTo(e.position))
+  //   this.selectedTile = e;
+  // }
+
+  // var line = new THREE.Line(new THREE.Geometry(), new THREE.LineBasicMaterial({ color: 0x0000ff }));
+  // this.scene.add(line);
+  // line.geometry.vertices.push(new THREE.Vector3(-10, 0, 0));
+  // line.geometry.vertices.push(new THREE.Vector3(0, 10, 0));
+  // line.geometry.vertices.push(new THREE.Vector3(10, 0, 0));
+
+  // e.material.color = new THREE.Color(0xff0000);
 
 }
 
