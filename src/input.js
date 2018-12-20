@@ -7,9 +7,7 @@ Input.prototype.constructor = function (world) {
   this.cameraSpeed = 2;
   this.zoom = 5;
   this.zoomInLimit = 50;
-  this.zoomOutLimit = 150;
-
-  this.selectedTile = new THREE.Mesh();
+  this.zoomOutLimit = 250;
 
 }
 
@@ -55,10 +53,14 @@ Input.prototype.onMouseUp = function (event) {
 
 Input.prototype.onMouseDown = function (event, e) {
 
-  // if (this.selectedTile != e) {
-  //   console.log(this.selectedTile.position.distanceTo(e.position))
-  //   this.selectedTile = e;
-  // }
+  switch (event.which) {
+    case 1:
+
+      break;
+    case 3:
+
+      break;
+  }
 
   // var line = new THREE.Line(new THREE.Geometry(), new THREE.LineBasicMaterial({ color: 0x0000ff }));
   // this.scene.add(line);

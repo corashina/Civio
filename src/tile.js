@@ -1,4 +1,4 @@
-import Sprite from './sprite';
+import Sprite from './Sprite';
 
 class Tile { constructor(geometry, material) { this.constructor(geometry, material) } }
 
@@ -14,17 +14,6 @@ Tile.prototype.addSprite = function (hexlength, hexheight) {
   sprite.mesh.position.x = this.mesh.position.x + hexheight;
   sprite.mesh.position.z = this.mesh.position.z + hexlength / 2;
   this.mesh.parent.add(sprite.mesh);
-
-}
-
-Tile.prototype.getNeighbours = function () {
-
-  // this.mapArray[nx + 1][ny].material.color = desert;
-  // this.mapArray[nx - 1][ny].material.color = desert;
-  // this.mapArray[nx][ny + 1].material.color = desert;
-  // this.mapArray[nx][ny - 1].material.color = desert;
-  // this.mapArray[nx + 1][ny - 1].material.color = desert;
-  // this.mapArray[nx - 1][ny - 1].material.color = desert;
 
 }
 

@@ -9,7 +9,18 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
     filename: 'bundle.js'
   },
-  mode: 'development'
+  mode: 'development',
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader"
+        }
+      }
+    ]
+  },
   // optimization: {
   //   minimizer: [new UglifyJsPlugin()]
   // }

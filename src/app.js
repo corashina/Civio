@@ -1,5 +1,7 @@
-import Input from './input';
-import Map from './map';
+import Input from './Input';
+import Tooltip from './Tooltip';
+import Map from './Map';
+import UI from './UI';
 
 class App { }
 
@@ -23,6 +25,7 @@ App.prototype.init = function () {
   this.renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('canvas'), antialias: true });
   this.renderer.shadowMap.enabled = true;
   this.renderer.setSize(window.innerWidth, window.innerHeight);
+  this.renderer.autoClear = false;
 
   this.raycaster = new THREE.Raycaster();
   this.mouse = new THREE.Vector2();
@@ -30,10 +33,15 @@ App.prototype.init = function () {
   this.map = new Map(this.scene, 10);
 
   this.input = new Input(this);
+  this.interface = new UI(this);
+
+  // var tooltip = new Tooltip('Hello\nxD');
+  // tooltip.mesh.position.set(0, 10, 0);
+  // this.scene.add(tooltip.mesh);
 
   // Camera
   this.camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
-  this.camera.position.set(0, 100, -50);
+  this.camera.position.set(0, 200, -100);
   this.camera.lookAt(0, 0, 0);
 
   // Events
@@ -53,6 +61,7 @@ App.prototype.render = function () {
   this.input.updateCamera();
 
   this.renderer.render(this.scene, this.camera);
+  this.renderer.render(this.interface.scene, this.interface.camera);
 
 }
 
