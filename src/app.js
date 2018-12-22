@@ -1,5 +1,5 @@
 import Input from './Input';
-import Tooltip from './Tooltip';
+import Stats from 'stats-js';
 import Map from './Map';
 import UI from './UI';
 
@@ -10,15 +10,11 @@ App.prototype.init = function () {
   // Scene
   this.scene = new THREE.Scene();
   this.textureloader = new THREE.TextureLoader();
-  this.scene.background = this.textureloader.load('./assets/ui/background.png');
+  // this.scene.background = this.textureloader.load('./assets/ui/background.png');
 
-  var plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(1193, 667, 32),
-    new THREE.MeshBasicMaterial({ map: this.textureloader.load('./assets/ui/background.png') }));
-  plane.rotateX(-Math.PI / 2);
-  plane.position.y -= 100;
-  this.scene.add(plane);
-
+  this.stats = new Stats();
+  this.stats.showPanel(0);
+  document.body.appendChild(this.stats.dom);
   this.intersected = null;
 
   // Renderer
@@ -30,8 +26,7 @@ App.prototype.init = function () {
   this.raycaster = new THREE.Raycaster();
   this.mouse = new THREE.Vector2();
 
-  this.map = new Map(this.scene, 10);
-
+  this.map = new Map(this, 10);
   this.input = new Input(this);
   this.interface = new UI(this);
 
@@ -57,11 +52,17 @@ App.prototype.init = function () {
 
 App.prototype.render = function () {
 
+  this.stats.begin();
+
   this.raycast();
   this.input.updateCamera();
 
+  this.map.water.material.uniforms.time.value += 0.01;
+
   this.renderer.render(this.scene, this.camera);
   this.renderer.render(this.interface.scene, this.interface.camera);
+
+  this.stats.end();
 
 }
 

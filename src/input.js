@@ -43,6 +43,12 @@ Input.prototype.onKeyDown = function (event) {
 
   this.keys[event.keyCode] = true;
 
+  switch (event.keyCode) {
+    case 89:
+      console.log(this.world.map.yields)
+      break;
+  }
+
 }
 
 Input.prototype.onMouseUp = function (event) {

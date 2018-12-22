@@ -1,20 +1,20 @@
 import Tile from './Tile';
 import SimplexNoise from 'simplex-noise';
+import Terrains from '../data/Terrains.json';
+import Features from '../data/Features.json';
+import Resources from '../data/Resources.json';
 
-const grassland = new THREE.Color(0x3b5323);
-const plains = new THREE.Color(0x7cfc00);
-const desert = new THREE.Color(0xedc9af);
-const tundra = new THREE.Color(0xc2b280);
-const coast = new THREE.Color(0x74ccf4);
-const lake = new THREE.Color(0x2389da);
+Terrains.GameInfo.Terrains.Row.forEach(e => console.log(e["-TerrainType"]));
+
 const ocean = new THREE.Color(0x0f5e9c);
 const snow = new THREE.Color(0xfffafa);
 
 
-class Map { constructor(scene, hexlength) { this.constructor(scene, hexlength) } }
+class Map { constructor(world, hexlength) { this.constructor(world, hexlength) } }
 
-Map.prototype.constructor = function (scene, hexlength) {
+Map.prototype.constructor = function (world, hexlength) {
 
+  this.world = world;
   this.hexlength = hexlength;
   this.hexheight = this.hexlength * Math.sin(Math.PI / 3) / Math.sin(Math.PI / 2);
 
@@ -33,22 +33,24 @@ Map.prototype.constructor = function (scene, hexlength) {
   // Todo change shape to get rid of Y rotation
   this.geometry.rotateY(-Math.PI / 2);
 
-  this.mapWidth = 40;
-  this.mapHeight = 40;
+  this.mapWidth = 60;
+  this.mapHeight = 34;
 
   this.simplex = new SimplexNoise();
-  this.mesh = new THREE.Group();
   this.mapArray = Array(this.mapHeight + 1).fill().map(() => Array(this.mapWidth + 1).fill(0));
 
-  this.layer1();
+  this.mesh = new THREE.Group();
+  this.yields = new THREE.Group();
+
+  this.layer1(); // Intial simplex
   this.layer2(); // Snow
-  this.layer3(); // Remove 
+  this.layer3(); // Remove anomalies
+  this.layer4(); // Resources
+  this.layer5(); // Water
 
   new THREE.Box3().setFromObject(this.mesh).getCenter(this.mesh.position).multiplyScalar(- 1);
 
-  this.mapArray[0][1].addSprite(this.hexlength, this.hexheight);
-
-  scene.add(this.mesh);
+  this.world.scene.add(this.mesh);
 
 }
 
@@ -60,7 +62,7 @@ Map.prototype.layer1 = function () {
 
   for (var y = 0; y <= this.mapHeight; y++) {
     for (var x = 0; x <= this.mapWidth; x++) {
-      let tile = new Tile(this.geometry, this.material);
+      let tile = new Tile(this);
       tile.mesh.position.x = -x * this.hexheight * 2;
       tile.mesh.position.x += y % 2 == 0 ? this.hexheight : 0;
       tile.mesh.position.z = -y * this.hexlength * 1.5;
@@ -81,18 +83,19 @@ Map.prototype.layer1 = function () {
       let distanceY = Math.abs(this.mapHeight / 2 - y) / (this.mapHeight * 0.01);
 
       if (m < 55 || distanceX > 40 || distanceY > 40) {
-        tile.type = "Water"
+        tile.type = "Water";
+        tile.mesh.position.y = -2;
         tile.mesh.material.color = ocean;
-      }
-      else {
+      } else {
         tile.type = "Land"
-        tile.mesh.position.y = (m - 45) / 10;
+        // tile.mesh.position.y = (m - 45) / 1;
+        tile.mesh.position.y = 0;
         tile.mesh.material.color = new THREE.Color(`rgb(0%,${m}%,0%)`);
       }
-
-      this.mesh.add(tile.mesh)
+      this.mesh.add(tile.mesh);
 
     }
+
   }
 
 }
@@ -128,7 +131,7 @@ Map.prototype.layer3 = function () {
         if (counter > 4) {
           this.mapArray[y][x].type = "Water"
           this.mapArray[y][x].mesh.material.color = ocean;
-          this.mapArray[y][x].mesh.position.y = 0;
+          this.mapArray[y][x].mesh.position.y = -2;
         }
       }
 
@@ -141,12 +144,50 @@ Map.prototype.layer3 = function () {
         if (this.mapArray[y + 1][x - 1].type == "Land") counter++;
         if (this.mapArray[y - 1][x - 1].type == "Land") counter++;
         if (counter > 4) {
-          this.mapArray[y][x].type = "Land"
+          this.mapArray[y][x].type = "Land";
+          this.mapArray[y][x].mesh.position.y = 0;
           this.mapArray[y][x].mesh.material.color = new THREE.Color(`rgb(0%,70%,0%)`);
         }
       }
     }
   }
+
+}
+
+Map.prototype.layer4 = function () {
+
+  for (var y = 0; y <= this.mapHeight; y++) {
+    for (var x = 0; x <= this.mapWidth; x++) {
+
+      if (this.mapArray[y][x].type == "Land") {
+        // this.mapArray[y][x].addSprite("copper");
+        this.mapArray[y][x].addYield("science");
+      }
+
+    }
+  }
+}
+
+Map.prototype.layer5 = function () {
+
+  let waterGeometry = new THREE.PlaneBufferGeometry(1065, 512);
+  this.water = new THREE.Water(
+    waterGeometry,
+    {
+      textureWidth: 512,
+      textureHeight: 512,
+      waterNormals: this.world.textureloader.load('./assets/waternormals.jpg', function (texture) {
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      }),
+      alpha: 0.5,
+      sunColor: 0xffffff,
+      waterColor: 0x001e0f,
+      distortionScale: 4.7,
+    }
+  );
+  this.water.rotateX(- Math.PI / 2);
+  this.water.position.y = -1;
+  this.world.scene.add(this.water);
 
 }
 
