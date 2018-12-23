@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 class UI { constructor(world) { this.constructor(world) } }
 
 UI.prototype.constructor = function (world) {

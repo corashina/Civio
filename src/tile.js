@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 class Tile { constructor(map) { this.constructor(map) } }
 
 Tile.prototype.constructor = function (map) {
@@ -45,6 +47,22 @@ Tile.prototype.createYield = function (name) {
     new THREE.SpriteMaterial({
       map: this.map.world.textureloader.load(`./assets/yields/${name}.png`)
     })
+  );
+
+}
+
+Tile.prototype.addModel = function () {
+
+  this.map.world.gltfloader.load('./assets/models/mountain/Mountain_01.gltf',
+    (gltf) => {
+      gltf.scene.position.copy(this.mesh.position);
+      gltf.scene.position.x += this.map.hexheight;
+      gltf.scene.position.z += this.map.hexlength / 2;
+      gltf.scene.scale.set(1, 2, 3);
+      this.map.world.scene.add(gltf.scene);
+    },
+    (xhr) => console.log(`${(xhr.loaded / xhr.total * 100)}% loaded`),
+    (err) => console.error('An error happened', err),
   );
 
 }

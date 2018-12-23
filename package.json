@@ -23,6 +23,8 @@
     },
     "dependencies": {
         "simplex-noise": "^2.4.0",
-        "stats-js": "^1.0.0"
+        "stats-js": "^1.0.0",
+        "three": "^0.99.0",
+        "three-gltf-loader": "^1.99.1"
     }
 }

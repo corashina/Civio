@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+import Water from './Water';
 import Tile from './Tile';
 import SimplexNoise from 'simplex-noise';
 import Terrains from '../data/Terrains.json';
@@ -48,8 +50,6 @@ Map.prototype.constructor = function (world, hexlength) {
   this.layer4(); // Resources
   this.layer5(); // Water
 
-  new THREE.Box3().setFromObject(this.mesh).getCenter(this.mesh.position).multiplyScalar(- 1);
-
   this.world.scene.add(this.mesh);
 
 }
@@ -60,8 +60,8 @@ Map.prototype.noise = function (nx, ny) {
 
 Map.prototype.layer1 = function () {
 
-  for (var y = 0; y <= this.mapHeight; y++) {
-    for (var x = 0; x <= this.mapWidth; x++) {
+  for (var y = 0; y < this.mapHeight; y++) {
+    for (var x = 0; x < this.mapWidth; x++) {
       let tile = new Tile(this);
       tile.mesh.position.x = -x * this.hexheight * 2;
       tile.mesh.position.x += y % 2 == 0 ? this.hexheight : 0;
@@ -92,6 +92,9 @@ Map.prototype.layer1 = function () {
         tile.mesh.position.y = 0;
         tile.mesh.material.color = new THREE.Color(`rgb(0%,${m}%,0%)`);
       }
+
+      tile.mesh.position.x += (this.mapWidth - 2.5) * this.hexheight;
+      tile.mesh.position.z += (this.mapHeight - 10) * this.hexlength;
       this.mesh.add(tile.mesh);
 
     }
@@ -102,12 +105,12 @@ Map.prototype.layer1 = function () {
 
 Map.prototype.layer2 = function () {
 
-  for (var y = 0; y <= this.mapHeight; y++) {
-    for (var x = 0; x <= this.mapWidth; x++) {
+  for (var y = 0; y < this.mapHeight; y++) {
+    for (var x = 0; x < this.mapWidth; x++) {
 
-      if (y == 0 || y == this.mapHeight) {
+      if (y == 0 || y == this.mapHeight - 1) {
         this.mapArray[y][x].mesh.material.color = snow;
-        this.mapArray[y][x].mesh.position.y = 2;
+        this.mapArray[y][x].mesh.position.y = 1;
       }
 
     }
@@ -117,8 +120,8 @@ Map.prototype.layer2 = function () {
 
 Map.prototype.layer3 = function () {
 
-  for (var y = 1; y <= this.mapHeight - 1; y++) {
-    for (var x = 1; x <= this.mapWidth - 1; x++) {
+  for (var y = 1; y < this.mapHeight - 1; y++) {
+    for (var x = 1; x < this.mapWidth - 1; x++) {
 
       var counter = 0;
       if (this.mapArray[y][x].type != "Water") {
@@ -156,12 +159,14 @@ Map.prototype.layer3 = function () {
 
 Map.prototype.layer4 = function () {
 
+  this.mapArray[17][32].addModel();
+
   for (var y = 0; y <= this.mapHeight; y++) {
     for (var x = 0; x <= this.mapWidth; x++) {
 
       if (this.mapArray[y][x].type == "Land") {
         // this.mapArray[y][x].addSprite("copper");
-        this.mapArray[y][x].addYield("science");
+        // this.mapArray[y][x].addYield("science");
       }
 
     }
@@ -170,8 +175,8 @@ Map.prototype.layer4 = function () {
 
 Map.prototype.layer5 = function () {
 
-  let waterGeometry = new THREE.PlaneBufferGeometry(1065, 512);
-  this.water = new THREE.Water(
+  let waterGeometry = new THREE.PlaneBufferGeometry((this.mapWidth + 0.5) * this.hexheight * 2, this.mapHeight * this.hexlength * 1.5);
+  this.water = new Water(
     waterGeometry,
     {
       textureWidth: 512,

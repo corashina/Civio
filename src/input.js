@@ -61,7 +61,7 @@ Input.prototype.onMouseDown = function (event, e) {
 
   switch (event.which) {
     case 1:
-
+      console.log(e.position);
       break;
     case 3:
 

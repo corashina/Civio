@@ -1,5 +1,8 @@
-import Input from './Input';
+import * as THREE from 'three';
+import GLTFLoader from 'three-gltf-loader';
 import Stats from 'stats-js';
+
+import Input from './Input';
 import Map from './Map';
 import UI from './UI';
 
@@ -10,6 +13,7 @@ App.prototype.init = function () {
   // Scene
   this.scene = new THREE.Scene();
   this.textureloader = new THREE.TextureLoader();
+  this.gltfloader = new GLTFLoader();
   // this.scene.background = this.textureloader.load('./assets/ui/background.png');
 
   this.stats = new Stats();
@@ -29,6 +33,9 @@ App.prototype.init = function () {
   this.map = new Map(this, 10);
   this.input = new Input(this);
   this.interface = new UI(this);
+
+  this.scene.add(new THREE.AmbientLight(0xffffff))
+
 
   // var tooltip = new Tooltip('Hello\nxD');
   // tooltip.mesh.position.set(0, 10, 0);
@@ -77,7 +84,7 @@ App.prototype.animate = function () {
 App.prototype.raycast = function () {
 
   this.raycaster.setFromCamera(this.mouse, this.camera);
-  let intersects = this.raycaster.intersectObjects(this.scene.children);
+  let intersects = this.raycaster.intersectObjects(this.map.mesh.children);
   if (intersects.length > 0) {
     if (intersects[0].object != this.intersected) this.intersected = intersects[0].object;
   } else this.intersected = null;
