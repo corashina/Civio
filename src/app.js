@@ -4,6 +4,7 @@ import Stats from 'stats-js';
 
 import Input from './Input';
 import Map from './Map';
+import Grid from './Grid';
 import UI from './UI';
 
 class App { }
@@ -33,6 +34,7 @@ App.prototype.init = function () {
   this.map = new Map(this, 10);
   this.input = new Input(this);
   this.interface = new UI(this);
+  this.grid = new Grid(this);
 
   this.scene.add(new THREE.AmbientLight(0xffffff))
 

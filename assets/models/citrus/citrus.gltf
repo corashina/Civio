@@ -2,8 +2,8 @@
     "accessors": [{
             "bufferView": 0,
             "componentType": 5123,
-            "count": 2682,
-            "max": [2681],
+            "count": 6450,
+            "max": [6449],
             "min": [0],
             "name": "buffer-0-accessor-indices-buffer-0-mesh-0",
             "type": "SCALAR"
@@ -11,28 +11,28 @@
         {
             "bufferView": 2,
             "componentType": 5126,
-            "count": 2682,
-            "max": [1.228432059288025, 4.934154033660889, 3.368755102157593],
-            "min": [-1.228433012962341, 0, -3.056158065795898],
+            "count": 6450,
+            "max": [5.568716049194336, 14.14921569824219, 3.588356971740723],
+            "min": [-5.259825229644775, 0, -3.588356971740723],
             "name": "buffer-0-accessor-position-buffer-0-mesh-0",
             "type": "VEC3"
         },
         {
             "bufferView": 2,
-            "byteOffset": 32184,
+            "byteOffset": 77400,
             "componentType": 5126,
-            "count": 2682,
-            "max": [0.9996320009231567, 0.9530249834060669, 0.990103006362915],
-            "min": [-0.9996320009231567, -1, -0.9580289721488953],
+            "count": 6450,
+            "max": [0.9942190051078796, 1, 1],
+            "min": [-0.9942190051078796, -1, -1],
             "name": "buffer-0-accessor-normal-buffer-0-mesh-0",
             "type": "VEC3"
         },
         {
             "bufferView": 1,
             "componentType": 5126,
-            "count": 2682,
-            "max": [0.9527140259742737, 0],
-            "min": [0, -0.9528120160102844],
+            "count": 6450,
+            "max": [0.9982960224151611, 0],
+            "min": [0, -0.9937999844551086],
             "name": "buffer-0-accessor-texcoord-buffer-0-mesh-0",
             "type": "VEC2"
         },
@@ -52,23 +52,23 @@
     },
     "bufferViews": [{
             "buffer": 0,
-            "byteLength": 5364,
+            "byteLength": 12900,
             "byteStride": 0,
             "name": "buffer-0-bufferview-ushort",
             "target": 34963
         },
         {
             "buffer": 0,
-            "byteLength": 21456,
-            "byteOffset": 5368,
+            "byteLength": 51600,
+            "byteOffset": 12904,
             "byteStride": 8,
             "name": "buffer-0-bufferview-vec2",
             "target": 34962
         },
         {
             "buffer": 0,
-            "byteLength": 64368,
-            "byteOffset": 26832,
+            "byteLength": 154800,
+            "byteOffset": 64512,
             "byteStride": 12,
             "name": "buffer-0-bufferview-vec3",
             "target": 34962
@@ -80,18 +80,18 @@
         }
     ],
     "buffers": [{
-        "byteLength": 91200,
+        "byteLength": 219312,
         "name": "buffer-0",
-        "uri": "sheep.bin"
+        "uri": "citrus.bin"
     }],
     "images": [{
         "mimeType": "image/png",
-        "name": "Sheep_mat-image",
-        "uri": "sheep.png"
+        "name": "AppleTree_mat-image",
+        "uri": "citrus.png"
     }],
     "materials": [{
         "doubleSided": true,
-        "name": "Sheep_mat",
+        "name": "AppleTree_mat",
         "pbrMetallicRoughness": {
             "baseColorFactor": [0.5, 0.5, 0.5, 1],
             "baseColorTexture": {
@@ -118,7 +118,7 @@
         "name": "node-0"
     }],
     "samplers": [{
-        "name": "Sheep_mat-sampler",
+        "name": "AppleTree_mat-sampler",
         "wrapS": 10497,
         "wrapT": 10497
     }],
@@ -127,7 +127,7 @@
         "nodes": [0]
     }],
     "textures": [{
-        "name": "Sheep_mat-texture",
+        "name": "AppleTree_mat-texture",
         "sampler": 0,
         "source": 0
     }]

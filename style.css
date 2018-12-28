@@ -2,16 +2,18 @@ html {
     cursor: url('./assets/pointers/Pointer.gif'), auto;
 }
 
-canvas {
-    position: absolute;
-    display: block;
+body {
+    user-select: none;
+    width: 100%;
     margin: 0px;
     overflow: hidden;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
 }
+
+canvas {
+    position: relative;
+    max-width: 100%;
+}
+
 
 div {
     left: 95% !important;

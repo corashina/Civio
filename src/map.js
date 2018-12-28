@@ -63,9 +63,9 @@ Map.prototype.layer1 = function () {
   for (var y = 0; y < this.mapHeight; y++) {
     for (var x = 0; x < this.mapWidth; x++) {
       let tile = new Tile(this);
-      tile.mesh.position.x = -x * this.hexheight * 2;
+      tile.mesh.position.x = x * this.hexheight * 2;
       tile.mesh.position.x += y % 2 == 0 ? this.hexheight : 0;
-      tile.mesh.position.z = -y * this.hexlength * 1.5;
+      tile.mesh.position.z = y * this.hexlength * 1.5;
       tile.mesh.userData = { x, y }
       this.mapArray[y][x] = tile;
 
@@ -82,7 +82,11 @@ Map.prototype.layer1 = function () {
       let distanceX = Math.abs(this.mapWidth / 2 - x) / (this.mapWidth * 0.01);
       let distanceY = Math.abs(this.mapHeight / 2 - y) / (this.mapHeight * 0.01);
 
-      if (m < 55 || distanceX > 40 || distanceY > 40) {
+      if (m > 70) {
+        // tile.type = "TERRAIN_GRASS_MOUNTAIN";
+        tile.mesh.material.color = new THREE.Color(`rgb(0%,${m}%,0%)`);
+        // tile.addModel('cattle');
+      } else if (m < 55 || distanceX > 40 || distanceY > 40) {
         tile.type = "Water";
         tile.mesh.position.y = -2;
         tile.mesh.material.color = ocean;
@@ -93,8 +97,8 @@ Map.prototype.layer1 = function () {
         tile.mesh.material.color = new THREE.Color(`rgb(0%,${m}%,0%)`);
       }
 
-      tile.mesh.position.x += (this.mapWidth - 2.5) * this.hexheight;
-      tile.mesh.position.z += (this.mapHeight - 10) * this.hexlength;
+      tile.mesh.position.x -= (this.mapWidth * this.hexheight);
+      tile.mesh.position.z -= (this.mapHeight * this.hexlength);
       this.mesh.add(tile.mesh);
 
     }
@@ -159,8 +163,6 @@ Map.prototype.layer3 = function () {
 
 Map.prototype.layer4 = function () {
 
-  this.mapArray[17][32].addModel();
-
   for (var y = 0; y <= this.mapHeight; y++) {
     for (var x = 0; x <= this.mapWidth; x++) {
 
@@ -175,15 +177,14 @@ Map.prototype.layer4 = function () {
 
 Map.prototype.layer5 = function () {
 
-  let waterGeometry = new THREE.PlaneBufferGeometry((this.mapWidth + 0.5) * this.hexheight * 2, this.mapHeight * this.hexlength * 1.5);
+  let waterGeometry = new THREE.PlaneBufferGeometry(this.mapWidth * this.hexheight * 2, this.mapHeight * this.hexlength * 1.5);
   this.water = new Water(
     waterGeometry,
     {
       textureWidth: 512,
       textureHeight: 512,
-      waterNormals: this.world.textureloader.load('./assets/waternormals.jpg', function (texture) {
-        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-      }),
+      waterNormals: this.world.textureloader.load('./assets/waternormals.jpg',
+        texture => texture.wrapS = texture.wrapT = THREE.RepeatWrapping),
       alpha: 0.5,
       sunColor: 0xffffff,
       waterColor: 0x001e0f,
@@ -192,6 +193,7 @@ Map.prototype.layer5 = function () {
   );
   this.water.rotateX(- Math.PI / 2);
   this.water.position.y = -1;
+  this.water.position.z -= this.hexlength * 9;
   this.world.scene.add(this.water);
 
 }
