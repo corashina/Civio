@@ -1,5 +1,5 @@
 const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');;
 
 module.exports = {
   entry: {
@@ -19,6 +19,9 @@ module.exports = {
           loader: "babel-loader"
         }
       }
-    ]
-  }
+    ],
+  },
+  plugins: [
+    new HtmlWebpackPlugin({ template: 'index.html' })
+  ]
 }

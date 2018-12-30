@@ -8,26 +8,37 @@ Tile.prototype.constructor = function (map) {
   this.mesh = new THREE.Mesh(this.map.geometry, this.map.material);
   this.mesh.receiveShadow = true;
 
+  this.yields = [];
+
 }
 
 Tile.prototype.addSprite = function (name) {
 
   let sprite = this.createSprite(name);
-  sprite.scale.set(5, 5, 5);
-  sprite.position.set(this.mesh.position.x + this.map.hexheight, 1, this.mesh.position.z + this.map.hexlength / 2);
-  this.map.mesh.add(sprite);
 
-}
+  if (name == 'science' || name == 'gold' || name == 'culture' || name == 'production' || name == 'food') {
+    sprite.scale.set(2, 2, 2);
+  } else sprite.scale.set(5, 5, 5);
 
-Tile.prototype.addYield = function (name) {
+  switch (this.yields.length) {
+    case 0:
+      sprite.position.set(this.mesh.position.x + this.map.hexheight, 0, this.mesh.position.z + this.map.hexlength / 2);
+      break;
+    case 1:
+      this.yields[0].position.set(this.mesh.position.x + this.map.hexheight - 1.5, 0, this.mesh.position.z + this.map.hexlength / 2);
+      sprite.position.set(this.mesh.position.x + this.map.hexheight + 1.5, 0, this.mesh.position.z + this.map.hexlength / 2);
+      break;
+    case 2:
 
-  let sprite = this.createYield(name);
-  sprite.scale.set(2, 2, 2);
-  sprite.position.set(this.mesh.position.x + this.map.hexheight, 1, this.mesh.position.z + this.map.hexlength / 2);
-  this.map.mesh.add(sprite);
+      break;
+    case 3:
 
-  // ToDo Group yields
-  // this.map.yields.add(sprite);
+      break;
+  }
+
+
+  this.map.yields.add(sprite);
+  this.yields.push(sprite);
 
 }
 
@@ -35,17 +46,9 @@ Tile.prototype.createSprite = function (name) {
 
   return new THREE.Sprite(
     new THREE.SpriteMaterial({
-      map: this.map.world.textureloader.load(`./assets/sprites/${name}.png`)
-    })
-  );
-
-}
-
-Tile.prototype.createYield = function (name) {
-
-  return new THREE.Sprite(
-    new THREE.SpriteMaterial({
-      map: this.map.world.textureloader.load(`./assets/yields/${name}.png`)
+      map: this.map.world.textureloader.load(`./assets/sprites/${name}.png`),
+      depthTest: false,
+      depthWrite: false
     })
   );
 
@@ -53,16 +56,13 @@ Tile.prototype.createYield = function (name) {
 
 Tile.prototype.addModel = function (name) {
 
-  this.map.world.gltfloader.load(`./assets/models/${name}/${name}.gltf`,
-    (gltf) => {
-      gltf.scene.position.copy(this.mesh.position);
-      gltf.scene.position.x += this.map.hexheight;
-      gltf.scene.position.z += this.map.hexlength / 2;
-      this.map.world.scene.add(gltf.scene);
-    },
-    (xhr) => console.log(`${(xhr.loaded / xhr.total * 100)}% loaded`),
-    (err) => console.error('An error happened', err),
-  );
+
+  var gltf = this.map.world.loader.models.scout;
+  console.log(gltf)
+  gltf.position.copy(this.mesh.position);
+  gltf.position.x += this.map.hexheight;
+  gltf.position.z += this.map.hexlength / 2;
+  this.map.world.scene.add(gltf);
 
 }
 

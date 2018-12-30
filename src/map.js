@@ -50,6 +50,7 @@ Map.prototype.constructor = function (world, hexlength) {
   this.layer4(); // Resources
   this.layer5(); // Water
 
+  this.world.scene.add(this.yields);
   this.world.scene.add(this.mesh);
 
 }
@@ -66,7 +67,10 @@ Map.prototype.layer1 = function () {
       tile.mesh.position.x = x * this.hexheight * 2;
       tile.mesh.position.x += y % 2 == 0 ? this.hexheight : 0;
       tile.mesh.position.z = y * this.hexlength * 1.5;
-      tile.mesh.userData = { x, y }
+
+      tile.mesh.position.x -= (this.mapWidth * this.hexheight);
+      tile.mesh.position.z -= (this.mapHeight * this.hexlength);
+
       this.mapArray[y][x] = tile;
 
       var nx = x / this.mapWidth - 0.5, ny = y / this.mapHeight - 0.5;
@@ -85,7 +89,9 @@ Map.prototype.layer1 = function () {
       if (m > 70) {
         // tile.type = "TERRAIN_GRASS_MOUNTAIN";
         tile.mesh.material.color = new THREE.Color(`rgb(0%,${m}%,0%)`);
-        // tile.addModel('cattle');
+        // tile.addModel('mountain');
+        tile.addSprite('gold');
+        tile.addSprite('science');
       } else if (m < 55 || distanceX > 40 || distanceY > 40) {
         tile.type = "Water";
         tile.mesh.position.y = -2;
@@ -97,8 +103,7 @@ Map.prototype.layer1 = function () {
         tile.mesh.material.color = new THREE.Color(`rgb(0%,${m}%,0%)`);
       }
 
-      tile.mesh.position.x -= (this.mapWidth * this.hexheight);
-      tile.mesh.position.z -= (this.mapHeight * this.hexlength);
+      tile.mesh.userData = tile;
       this.mesh.add(tile.mesh);
 
     }

@@ -46,8 +46,11 @@ Input.prototype.onKeyDown = function (event) {
   this.keys[event.keyCode] = true;
 
   switch (event.keyCode) {
+    case 71:
+      this.world.map.grid.visible = !this.world.map.grid.visible;
+      break;
     case 89:
-      console.log(this.world.map.yields)
+      this.world.map.yields.visible = !this.world.map.yields.visible;
       break;
   }
 
@@ -61,12 +64,14 @@ Input.prototype.onMouseUp = function (event) {
 
 Input.prototype.onMouseDown = function (event, e) {
 
+  event.preventDefault();
+
   switch (event.which) {
     case 1:
-      console.log(e.position);
+      console.log(e);
       break;
     case 3:
-
+      console.log(e.userData.addModel())
       break;
   }
 

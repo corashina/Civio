@@ -19,7 +19,7 @@ UI.prototype.constructor = function (world) {
   this.science_yield.scale.set(125, 65, 1);
   this.scene.add(this.science_yield);
 
-  this.science = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.world.textureloader.load("./assets/yields/science.png") }));
+  this.science = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.world.textureloader.load("./assets/sprites/science.png") }));
   this.science.center.set(0.0, 1.0);
   this.science.scale.set(16, 16, 1);
   this.scene.add(this.science);
@@ -29,7 +29,7 @@ UI.prototype.constructor = function (world) {
   this.gold_yield.scale.set(125, 65, 1);
   this.scene.add(this.gold_yield);
 
-  this.gold = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.world.textureloader.load("./assets/yields/gold.png") }));
+  this.gold = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.world.textureloader.load("./assets/sprites/gold.png") }));
   this.gold.center.set(0.0, 1.0);
   this.gold.scale.set(16, 16, 1);
   this.scene.add(this.gold);

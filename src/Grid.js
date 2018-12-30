@@ -21,6 +21,8 @@ Grid.prototype.constructor = function (world) {
 
   this.line.rotation.set(-Math.PI / 2, 0, -Math.PI / 2)
 
+  this.mesh = new THREE.Group();
+
   for (var y = 0; y < this.world.map.mapHeight; y++) {
     for (var x = 0; x < this.world.map.mapWidth; x++) {
 
@@ -30,10 +32,14 @@ Grid.prototype.constructor = function (world) {
         0,
         y * this.world.map.hexlength * 1.5 - (this.world.map.hexlength * this.world.map.mapHeight));
       this.line.position.x += y % 2 == 0 ? this.world.map.hexheight : 0;
-      this.world.scene.add(this.line);
+      this.mesh.add(this.line);
 
     }
   }
+
+  this.world.map.grid = this.mesh;
+  this.world.scene.add(this.mesh);
+
 }
 
 export default Grid;

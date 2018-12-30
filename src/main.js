@@ -1,5 +1,3 @@
 import App from './app';
 
-var app = new App();
-app.init();
-app.animate()
+const APP = new App();

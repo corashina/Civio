@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 class Light { constructor(world) { this.constructor(world) } }
 
 Light.prototype.constructor = function (world) {

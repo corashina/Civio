@@ -1,21 +1,23 @@
 import * as THREE from 'three';
-import GLTFLoader from 'three-gltf-loader';
 import Stats from 'stats-js';
 
+import AssetLoader from './AssetLoader';
 import Input from './Input';
 import Map from './Map';
 import Grid from './Grid';
 import UI from './UI';
+import Unit from './Unit';
+import Light from './Light';
 
-class App { }
+class App { constructor() { this.constructor() } }
 
-App.prototype.init = function () {
+App.prototype.constructor = function () {
 
   // Scene
   this.scene = new THREE.Scene();
-  this.textureloader = new THREE.TextureLoader();
-  this.gltfloader = new GLTFLoader();
-  // this.scene.background = this.textureloader.load('./assets/ui/background.png');
+
+  this.loader = new AssetLoader(this);
+  this.textureloader = new THREE.TextureLoader(this.loader.manager);
 
   this.stats = new Stats();
   this.stats.showPanel(0);
@@ -32,12 +34,11 @@ App.prototype.init = function () {
   this.mouse = new THREE.Vector2();
 
   this.map = new Map(this, 10);
-  this.input = new Input(this);
+  this.io = new Input(this);
   this.interface = new UI(this);
   this.grid = new Grid(this);
 
-  this.scene.add(new THREE.AmbientLight(0xffffff))
-
+  // this.light = new Light(this);
 
   // var tooltip = new Tooltip('Hello\nxD');
   // tooltip.mesh.position.set(0, 10, 0);
@@ -49,13 +50,13 @@ App.prototype.init = function () {
   this.camera.lookAt(0, 0, 0);
 
   // Events
-  window.addEventListener('resize', (e) => this.input.onWindowResize(e), false);
-  window.addEventListener('mousemove', (e) => this.input.onMouseMove(e), false);
-  window.addEventListener('keyup', (e) => this.input.onKeyUp(e), false);
-  window.addEventListener('keydown', (e) => this.input.onKeyDown(e), false);
-  window.addEventListener('mousedown', (e) => this.input.onMouseDown(e, this.intersected), false);
-  window.addEventListener('mouseup', (e) => this.input.onMouseUp(e), false);
-  window.addEventListener('wheel', (e) => this.input.onWheel(e), { passive: false });
+  window.addEventListener('resize', (e) => this.io.onWindowResize(e), false);
+  window.addEventListener('mousemove', (e) => this.io.onMouseMove(e), false);
+  window.addEventListener('keyup', (e) => this.io.onKeyUp(e), false);
+  window.addEventListener('keydown', (e) => this.io.onKeyDown(e), false);
+  window.addEventListener('mousedown', (e) => this.io.onMouseDown(e, this.intersected), false);
+  window.addEventListener('mouseup', (e) => this.io.onMouseUp(e), false);
+  window.addEventListener('wheel', (e) => this.io.onWheel(e), { passive: false });
 
 }
 
@@ -64,7 +65,7 @@ App.prototype.render = function () {
   this.stats.begin();
 
   this.raycast();
-  this.input.updateCamera();
+  this.io.updateCamera();
 
   this.map.water.material.uniforms.time.value += 0.01;
 
