@@ -59,10 +59,10 @@ Tile.prototype.addModel = function (name) {
 
   var gltf = this.map.world.loader.models.scout;
   console.log(gltf)
-  gltf.position.copy(this.mesh.position);
-  gltf.position.x += this.map.hexheight;
-  gltf.position.z += this.map.hexlength / 2;
-  this.map.world.scene.add(gltf);
+  gltf.scene.position.copy(this.mesh.position);
+  gltf.scene.position.x += this.map.hexheight;
+  gltf.scene.position.z += this.map.hexlength / 2;
+  this.map.world.scene.add(gltf.scene);
 
 }
 
