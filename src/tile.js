@@ -56,9 +56,8 @@ Tile.prototype.createSprite = function (name) {
 
 Tile.prototype.addModel = function (name) {
 
-
-  var gltf = this.map.world.loader.models.scout;
-  console.log(gltf)
+  var gltf = this.map.world.loader.models.astronaut;
+  gltf.scene.scale.set(250, 250, 250);
   gltf.scene.position.copy(this.mesh.position);
   gltf.scene.position.x += this.map.hexheight;
   gltf.scene.position.z += this.map.hexlength / 2;

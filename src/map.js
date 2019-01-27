@@ -2,11 +2,6 @@ import * as THREE from 'three';
 import Water from './Water';
 import Tile from './Tile';
 import SimplexNoise from 'simplex-noise';
-import Terrains from '../data/Terrains.json';
-import Features from '../data/Features.json';
-import Resources from '../data/Resources.json';
-
-Terrains.GameInfo.Terrains.Row.forEach(e => console.log(e["-TerrainType"]));
 
 const ocean = new THREE.Color(0x0f5e9c);
 const snow = new THREE.Color(0xfffafa);

@@ -71,7 +71,7 @@ Input.prototype.onMouseDown = function (event, e) {
       console.log(e);
       break;
     case 3:
-      console.log(e.userData.addModel())
+      e.userData.addModel();
       break;
   }
 

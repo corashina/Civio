@@ -11,8 +11,9 @@ Unit.prototype.constructor = function (world) {
   this.rangedStrength = 0;
   this.attackRange = 0;
 
-  this.mesh = this.world.loader.models.scout;
-  this.world.scene.add(this.mesh);
+  console.log(this.world.loader.models.astronaut)
+  // this.mesh = this.world.loader.assetloader
+  // this.world.scene.add(this.mesh)
 
 }
 

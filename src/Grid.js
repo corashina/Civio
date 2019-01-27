@@ -32,8 +32,8 @@ Grid.prototype.constructor = function (world) {
         0,
         y * this.world.map.hexlength * 1.5 - (this.world.map.hexlength * this.world.map.mapHeight));
       this.line.position.x += y % 2 == 0 ? this.world.map.hexheight : 0;
-      this.mesh.add(this.line);
 
+      this.mesh.add(this.line);
     }
   }
 

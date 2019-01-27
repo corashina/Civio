@@ -38,6 +38,8 @@ App.prototype.constructor = function () {
   this.interface = new UI(this);
   this.grid = new Grid(this);
 
+  var unit = new Unit(this);
+
   // this.light = new Light(this);
 
   // var tooltip = new Tooltip('Hello\nxD');
