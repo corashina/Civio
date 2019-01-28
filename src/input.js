@@ -1,15 +1,19 @@
 import * as THREE from 'three';
+import Tile from './Tile';
 
 class Input { constructor(world) { this.constructor(world) } }
 
 Input.prototype.constructor = function (world) {
 
   this.world = world;
+
   this.keys = [];
   this.cameraSpeed = 2;
   this.zoom = 5;
   this.zoomInLimit = 50;
   this.zoomOutLimit = 250;
+
+  this.select = null;
 
 }
 
@@ -52,6 +56,9 @@ Input.prototype.onKeyDown = function (event) {
     case 89:
       this.world.map.yields.visible = !this.world.map.yields.visible;
       break;
+    case 107:
+      this.select.userData.addModel();
+      break;
   }
 
 }
@@ -68,20 +75,28 @@ Input.prototype.onMouseDown = function (event, e) {
 
   switch (event.which) {
     case 1:
-      console.log(e);
+      this.select = e;
+
+      this.world.scene.remove(this.ring);
+
+      this.ring = new THREE.Mesh(
+        new THREE.RingBufferGeometry(this.world.map.hexheight - 1, this.world.map.hexheight, 20, 5, 0, Math.PI * 2),
+        new THREE.MeshBasicMaterial({ color: 0x8b0000, transparent: true, opacity: 0.5 })
+      );
+      this.ring.rotateX(-Math.PI / 2);
+
+      this.ring.position.set(e.position.x + this.world.map.hexheight, 1, e.position.z + this.world.map.hexlength / 2);
+
+      this.world.scene.add(this.ring);
+      break;
+    case 2:
+      this.select = null;
+      this.world.scene.remove(this.ring);
       break;
     case 3:
-      e.userData.addModel();
+      this.select.userData.units[0].move(e);
       break;
   }
-
-  // var line = new THREE.Line(new THREE.Geometry(), new THREE.LineBasicMaterial({ color: 0x0000ff }));
-  // this.scene.add(line);
-  // line.geometry.vertices.push(new THREE.Vector3(-10, 0, 0));
-  // line.geometry.vertices.push(new THREE.Vector3(0, 10, 0));
-  // line.geometry.vertices.push(new THREE.Vector3(10, 0, 0));
-
-  // e.material.color = new THREE.Color(0xff0000);
 
 }
 

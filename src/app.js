@@ -32,15 +32,15 @@ App.prototype.constructor = function () {
 
   this.raycaster = new THREE.Raycaster();
   this.mouse = new THREE.Vector2();
+  this.clock = new THREE.Clock();
+  this.mixers = [];
 
   this.map = new Map(this, 10);
   this.io = new Input(this);
   this.interface = new UI(this);
   this.grid = new Grid(this);
 
-  var unit = new Unit(this);
-
-  // this.light = new Light(this);
+  this.light = new Light(this);
 
   // var tooltip = new Tooltip('Hello\nxD');
   // tooltip.mesh.position.set(0, 10, 0);
@@ -65,6 +65,9 @@ App.prototype.constructor = function () {
 App.prototype.render = function () {
 
   this.stats.begin();
+
+  this.delta = this.clock.getDelta();
+  this.mixers.forEach(mixer => mixer.update(this.delta));
 
   this.raycast();
   this.io.updateCamera();

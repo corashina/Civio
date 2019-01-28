@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import Unit from './Unit';
 
 class Tile { constructor(map) { this.constructor(map) } }
 
@@ -7,7 +8,7 @@ Tile.prototype.constructor = function (map) {
   this.map = map;
   this.mesh = new THREE.Mesh(this.map.geometry, this.map.material);
   this.mesh.receiveShadow = true;
-
+  this.units = [];
   this.yields = [];
 
 }
@@ -36,7 +37,6 @@ Tile.prototype.addSprite = function (name) {
       break;
   }
 
-
   this.map.yields.add(sprite);
   this.yields.push(sprite);
 
@@ -56,12 +56,7 @@ Tile.prototype.createSprite = function (name) {
 
 Tile.prototype.addModel = function (name) {
 
-  var gltf = this.map.world.loader.models.astronaut;
-  gltf.scene.scale.set(250, 250, 250);
-  gltf.scene.position.copy(this.mesh.position);
-  gltf.scene.position.x += this.map.hexheight;
-  gltf.scene.position.z += this.map.hexlength / 2;
-  this.map.world.scene.add(gltf.scene);
+  this.units.push(new Unit(this));
 
 }
 

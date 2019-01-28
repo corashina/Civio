@@ -7,22 +7,23 @@ Light.prototype.constructor = function (world) {
   this.world = world;
 
   this.mesh = new THREE.DirectionalLight(0xffffff, 1, 100);
-  this.mesh.position.set(-20, 50, 0);
+  this.mesh.position.set(0, 100, 0);
   this.mesh.castShadow = true;
 
   this.mesh.shadow.mapSize.width = 512;
   this.mesh.shadow.mapSize.height = 512;
-  this.mesh.shadow.camera.near = 0.5;
-  this.mesh.shadow.camera.far = 500;
-  this.mesh.shadowCameraLeft = -10;
-  this.mesh.shadowCameraRight = 10;
-  this.mesh.shadowCameraTop = 10;
-  this.mesh.shadowCameraBottom = -10;
+  this.mesh.shadow.camera.near = 95;
+  this.mesh.shadow.camera.far = 100;
+  this.mesh.shadowCameraLeft = -this.world.map.hexheight * this.world.map.mapWidth;
+  this.mesh.shadowCameraRight = this.world.map.hexheight * this.world.map.mapWidth;
+  this.mesh.shadowCameraTop = this.world.map.hexlength * this.world.map.mapHeight;
+  this.mesh.shadowCameraBottom = -this.world.map.hexlength * this.world.map.mapHeight / 2;
 
-  this.helper = new THREE.CameraHelper(this.mesh.shadow.camera);
+  // this.helper = new THREE.CameraHelper(this.mesh.shadow.camera);
+  // this.world.scene.add(this.helper);
 
   this.world.scene.add(this.mesh);
-  this.world.scene.add(this.helper);
+
 
 }
 
