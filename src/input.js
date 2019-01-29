@@ -75,28 +75,64 @@ Input.prototype.onMouseDown = function (event, e) {
 
   switch (event.which) {
     case 1:
-      this.select = e;
-
-      this.world.scene.remove(this.ring);
-
-      this.ring = new THREE.Mesh(
-        new THREE.RingBufferGeometry(this.world.map.hexheight - 1, this.world.map.hexheight, 20, 5, 0, Math.PI * 2),
-        new THREE.MeshBasicMaterial({ color: 0x8b0000, transparent: true, opacity: 0.5 })
-      );
-      this.ring.rotateX(-Math.PI / 2);
-
-      this.ring.position.set(e.position.x + this.world.map.hexheight, 1, e.position.z + this.world.map.hexlength / 2);
-
-      this.world.scene.add(this.ring);
+      this.leftClick(e);
       break;
     case 2:
-      this.select = null;
-      this.world.scene.remove(this.ring);
+      this.middleClick(e);
       break;
     case 3:
-      this.select.userData.units[0].move(e);
+      this.rightClick(e);
       break;
   }
+
+}
+
+Input.prototype.leftClick = function (e) {
+
+  if (e.userData.units.length != 0) {
+    this.select = e;
+
+    this.world.scene.remove(this.ring);
+
+    this.ring = new THREE.Mesh(
+      new THREE.RingBufferGeometry(this.world.map.hexheight - 1, this.world.map.hexheight, 20, 5, 0, Math.PI * 2),
+      new THREE.MeshBasicMaterial({ color: 0x8b0000, transparent: true, opacity: 0.5 })
+    );
+    this.ring.rotateX(-Math.PI / 2);
+
+    this.ring.position.set(e.position.x + this.world.map.hexheight, 1, e.position.z + this.world.map.hexlength / 2);
+
+    this.world.scene.add(this.ring);
+  } else {
+    this.world.scene.remove(this.ring);
+    this.select = null;
+  }
+
+}
+
+Input.prototype.middleClick = function (e) {
+
+  this.select = e;
+
+  this.world.scene.remove(this.ring);
+
+  this.ring = new THREE.Mesh(
+    new THREE.RingBufferGeometry(this.world.map.hexheight - 1, this.world.map.hexheight, 20, 5, 0, Math.PI * 2),
+    new THREE.MeshBasicMaterial({ color: 0x8b0000, transparent: true, opacity: 0.5 })
+  );
+  this.ring.rotateX(-Math.PI / 2);
+
+  this.ring.position.set(e.position.x + this.world.map.hexheight, 1, e.position.z + this.world.map.hexlength / 2);
+
+  this.world.scene.add(this.ring);
+
+}
+
+Input.prototype.rightClick = function (e) {
+
+  if (this.select.userData.units[0].length != 0) this.select.userData.units[0].move(e);
+  this.world.scene.remove(this.ring);
+  this.select = null;
 
 }
 
