@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import Water from './Water';
-import Tile from './Tile';
 import SimplexNoise from 'simplex-noise';
 
 const ocean = new THREE.Color(0x0f5e9c);
@@ -12,6 +11,7 @@ class Map { constructor(world, hexlength) { this.constructor(world, hexlength) }
 Map.prototype.constructor = function (world, hexlength) {
 
   this.world = world;
+
   this.hexlength = hexlength;
   this.hexheight = this.hexlength * Math.sin(Math.PI / 3) / Math.sin(Math.PI / 2);
 
@@ -54,17 +54,33 @@ Map.prototype.noise = function (nx, ny) {
   return this.simplex.noise2D(nx, ny) / 2 + 0.5;
 }
 
+Map.prototype.newTile = function () {
+
+  let tile = new THREE.Mesh(this.geometry, this.material);
+  tile.receiveShadow = true;
+  tile.userData = {
+    world: this.world,
+    map: this,
+    units: [],
+    yields: []
+  }
+  return tile;
+
+}
+
 Map.prototype.layer1 = function () {
 
   for (var y = 0; y < this.mapHeight; y++) {
     for (var x = 0; x < this.mapWidth; x++) {
-      let tile = new Tile(this);
-      tile.mesh.position.x = x * this.hexheight * 2;
-      tile.mesh.position.x += y % 2 == 0 ? this.hexheight : 0;
-      tile.mesh.position.z = y * this.hexlength * 1.5;
 
-      tile.mesh.position.x -= (this.mapWidth * this.hexheight);
-      tile.mesh.position.z -= (this.mapHeight * this.hexlength);
+      let tile = this.newTile();
+
+      tile.position.x = x * this.hexheight * 2;
+      tile.position.x += y % 2 == 0 ? this.hexheight : 0;
+      tile.position.z = y * this.hexlength * 1.5;
+
+      tile.position.x -= (this.mapWidth * this.hexheight);
+      tile.position.z -= (this.mapHeight * this.hexlength);
 
       this.mapArray[y][x] = tile;
 
@@ -83,23 +99,20 @@ Map.prototype.layer1 = function () {
 
       if (m > 70) {
         // tile.type = "TERRAIN_GRASS_MOUNTAIN";
-        tile.mesh.material.color = new THREE.Color(`rgb(0%,${m}%,0%)`);
+        tile.material.color = new THREE.Color(`rgb(0%,${m}%,0%)`);
         // tile.addModel('mountain');
-        tile.addSprite('gold');
-        tile.addSprite('science');
       } else if (m < 55 || distanceX > 40 || distanceY > 40) {
         tile.type = "Water";
-        tile.mesh.position.y = -2;
-        tile.mesh.material.color = ocean;
+        tile.position.y = -2;
+        tile.material.color = ocean;
       } else {
         tile.type = "Land"
         // tile.mesh.position.y = (m - 45) / 1;
-        tile.mesh.position.y = 0;
-        tile.mesh.material.color = new THREE.Color(`rgb(0%,${m}%,0%)`);
+        tile.position.y = 0;
+        tile.material.color = new THREE.Color(`rgb(0%,${m}%,0%)`);
       }
 
-      tile.mesh.userData = tile;
-      this.mesh.add(tile.mesh);
+      this.mesh.add(tile);
 
     }
 
@@ -113,8 +126,8 @@ Map.prototype.layer2 = function () {
     for (var x = 0; x < this.mapWidth; x++) {
 
       if (y == 0 || y == this.mapHeight - 1) {
-        this.mapArray[y][x].mesh.material.color = snow;
-        this.mapArray[y][x].mesh.position.y = 1;
+        this.mapArray[y][x].material.color = snow;
+        this.mapArray[y][x].position.y = 1;
       }
 
     }
@@ -137,8 +150,8 @@ Map.prototype.layer3 = function () {
         if (this.mapArray[y - 1][x - 1].type == "Water") counter++;
         if (counter > 4) {
           this.mapArray[y][x].type = "Water"
-          this.mapArray[y][x].mesh.material.color = ocean;
-          this.mapArray[y][x].mesh.position.y = -2;
+          this.mapArray[y][x].material.color = ocean;
+          this.mapArray[y][x].position.y = -2;
         }
       }
 
@@ -152,8 +165,8 @@ Map.prototype.layer3 = function () {
         if (this.mapArray[y - 1][x - 1].type == "Land") counter++;
         if (counter > 4) {
           this.mapArray[y][x].type = "Land";
-          this.mapArray[y][x].mesh.position.y = 0;
-          this.mapArray[y][x].mesh.material.color = new THREE.Color(`rgb(0%,70%,0%)`);
+          this.mapArray[y][x].position.y = 0;
+          this.mapArray[y][x].material.color = new THREE.Color(`rgb(0%,70%,0%)`);
         }
       }
     }
@@ -183,8 +196,7 @@ Map.prototype.layer5 = function () {
     {
       textureWidth: 512,
       textureHeight: 512,
-      waterNormals: this.world.textureloader.load('./assets/waternormals.jpg',
-        texture => texture.wrapS = texture.wrapT = THREE.RepeatWrapping),
+      waterNormals: this.world.loader.textures['waternormals'],
       alpha: 0.5,
       sunColor: 0xffffff,
       waterColor: 0x001e0f,

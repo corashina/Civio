@@ -19,8 +19,6 @@ Unit.prototype.constructor = function (tile) {
   this.gltf.scene.traverse((child) => { if (child.isMesh) child.castShadow = true });
 
   this.gltf.scene.position.copy(tile.mesh.position);
-  this.gltf.scene.position.x += this.tile.map.hexheight;
-  this.gltf.scene.position.z += this.tile.map.hexlength / 2;
 
   // Icon
   this.icon = new THREE.Sprite(

@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import Tile from './Tile';
 
 class Input { constructor(world) { this.constructor(world) } }
 
@@ -88,7 +87,6 @@ Input.prototype.onMouseDown = function (event, e) {
 }
 
 Input.prototype.leftClick = function (e) {
-
   if (e.userData.units.length != 0) {
     this.select = e;
 

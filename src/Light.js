@@ -14,10 +14,10 @@ Light.prototype.constructor = function (world) {
   this.mesh.shadow.mapSize.height = 512;
   this.mesh.shadow.camera.near = 95;
   this.mesh.shadow.camera.far = 100;
-  this.mesh.shadowCameraLeft = -this.world.map.hexheight * this.world.map.mapWidth;
-  this.mesh.shadowCameraRight = this.world.map.hexheight * this.world.map.mapWidth;
-  this.mesh.shadowCameraTop = this.world.map.hexlength * this.world.map.mapHeight;
-  this.mesh.shadowCameraBottom = -this.world.map.hexlength * this.world.map.mapHeight / 2;
+  this.mesh.shadow.camera.left = -this.world.map.hexheight * this.world.map.mapWidth;
+  this.mesh.shadow.camera.right = this.world.map.hexheight * this.world.map.mapWidth;
+  this.mesh.shadow.camera.top = this.world.map.hexlength * this.world.map.mapHeight;
+  this.mesh.shadow.camera.bottom = -this.world.map.hexlength * this.world.map.mapHeight / 2;
 
   // this.helper = new THREE.CameraHelper(this.mesh.shadow.camera);
   // this.world.scene.add(this.helper);

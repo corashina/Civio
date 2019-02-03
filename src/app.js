@@ -1,23 +1,27 @@
 import * as THREE from 'three';
 import Stats from 'stats-js';
 
-import AssetLoader from './AssetLoader';
+import Loader from './Loader';
+import Utils from './Utils';
 import Input from './Input';
 import Map from './Map';
 import Grid from './Grid';
 import UI from './UI';
-import Unit from './Unit';
 import Light from './Light';
 
-class App { constructor() { this.constructor() } }
+
+class App {
+  constructor() {
+    this.loader = new Loader(this);
+  }
+}
 
 App.prototype.constructor = function () {
 
   // Scene
   this.scene = new THREE.Scene();
 
-  this.loader = new AssetLoader(this);
-  this.textureloader = new THREE.TextureLoader(this.loader.manager);
+  this.utils = new Utils(this);
 
   this.stats = new Stats();
   this.stats.showPanel(0);
@@ -59,6 +63,8 @@ App.prototype.constructor = function () {
   window.addEventListener('mousedown', (e) => this.io.onMouseDown(e, this.intersected), false);
   window.addEventListener('mouseup', (e) => this.io.onMouseUp(e), false);
   window.addEventListener('wheel', (e) => this.io.onWheel(e), { passive: false });
+
+  this.animate();
 
 }
 
