@@ -1,0 +1,29 @@
+{
+    "GRASSLAND": {
+        "FOOD": 2
+    },
+    "PLAINS": {
+        "FOOD": 1,
+        "PRODUCTION": 1
+    },
+    "DESERT": {
+
+    },
+    "TUNDRA": {
+        "FOOD": 1
+    },
+    "COAST": {
+        "FOOD": 1,
+        "GOLD": 1
+    },
+    "LAKE": {
+        "FOOD": 1,
+        "GOLD": 1
+    },
+    "OCEAN": {
+        "FOOD": 1
+    },
+    "SNOW": {
+
+    }
+}

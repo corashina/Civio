@@ -28,36 +28,27 @@ Utils.prototype.createSprite = function (path) {
   return new THREE.Sprite(
     new THREE.SpriteMaterial({
       map: this.world.loader.textures[path],
-      depthWrite: false
+      depthWrite: false,
+      depthTest: false
     })
   );
 
 }
 
-Utils.prototype.addSprite = function (tile, name) {
+Utils.prototype.addSprite = function (map, tile, name) {
+
   let sprite = this.createSprite(name);
 
   if (name == 'science' || name == 'gold' || name == 'culture' || name == 'production' || name == 'food') {
     sprite.scale.set(2, 2, 2);
   } else sprite.scale.set(5, 5, 5);
 
-  switch (tile.userData.yields.length) {
-    case 0:
-      sprite.position.set(tile.position.x + this.world.map.hexheight, 0, tile.position.z + this.world.map.hexlength / 2);
-      break;
-    case 1:
-      this.yields[0].position.set(tile.position.x + this.world.map.hexheight - 1.5, 0, tile.position.z + this.world.map.hexlength / 2);
-      sprite.position.set(tile.position.x + this.world.map.hexheight + 1.5, 0, tile.position.z + this.world.map.hexlength / 2);
-      break;
-    case 2:
-      this.yields[0].position.set(tile.position.x + this.world.map.hexheight)
-      break;
-    case 3:
+  tile.userData.yields.forEach(y => y.position.set(y.position.x + map.hexheight / 4, 0, y.position.z));
+  let i = tile.userData.yields.length + 1;
+  sprite.position.set(tile.position.x + i * map.hexheight, 0, tile.position.z + map.hexlength / 2);
 
-      break;
-  }
-
-  this.world.scene.add(sprite);
+  tile.userData.yields.push(sprite);
+  map.yields.add(sprite);
 
 }
 

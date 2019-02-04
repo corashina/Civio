@@ -21,8 +21,6 @@ App.prototype.constructor = function () {
   // Scene
   this.scene = new THREE.Scene();
 
-  this.utils = new Utils(this);
-
   this.stats = new Stats();
   this.stats.showPanel(0);
   document.body.appendChild(this.stats.dom);
@@ -39,6 +37,7 @@ App.prototype.constructor = function () {
   this.clock = new THREE.Clock();
   this.mixers = [];
 
+  this.utils = new Utils(this);
   this.map = new Map(this, 10);
   this.io = new Input(this);
   this.interface = new UI(this);

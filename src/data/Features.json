@@ -1,0 +1,24 @@
+{
+    "HILLS": {
+        "PRODUCTION": 1
+    },
+    "WOODS": {
+        "PRODUCTION": 1
+    },
+    "RAINFOREST": {
+        "FOOD": 1
+    },
+    "MARSH": {
+        "FOOD": 1
+    },
+    "FLOODPLAINS": {
+        "FOOD": 3
+    },
+    "OASIS": {
+        "FOOD": 3,
+        "GOLD": 1
+    },
+    "MOUNTAIN": {
+
+    }
+}

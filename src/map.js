@@ -98,16 +98,14 @@ Map.prototype.layer1 = function () {
       let distanceY = Math.abs(this.mapHeight / 2 - y) / (this.mapHeight * 0.01);
 
       if (m > 70) {
-        // tile.type = "TERRAIN_GRASS_MOUNTAIN";
+        tile.userData.type = "TERRAIN_GRASS_MOUNTAIN";
         tile.material.color = new THREE.Color(`rgb(0%,${m}%,0%)`);
-        // tile.addModel('mountain');
       } else if (m < 55 || distanceX > 40 || distanceY > 40) {
-        tile.type = "Water";
+        tile.userData.type = "OCEAN";
         tile.position.y = -2;
         tile.material.color = ocean;
       } else {
-        tile.type = "Land"
-        // tile.mesh.position.y = (m - 45) / 1;
+        tile.userData.type = "GRASSLAND"
         tile.position.y = 0;
         tile.material.color = new THREE.Color(`rgb(0%,${m}%,0%)`);
       }
@@ -141,30 +139,36 @@ Map.prototype.layer3 = function () {
     for (var x = 1; x < this.mapWidth - 1; x++) {
 
       var counter = 0;
-      if (this.mapArray[y][x].type != "Water") {
-        if (this.mapArray[y + 1][x].type == "Water") counter++;
-        if (this.mapArray[y - 1][x].type == "Water") counter++;
-        if (this.mapArray[y][x + 1].type == "Water") counter++;
-        if (this.mapArray[y][x - 1].type == "Water") counter++;
-        if (this.mapArray[y + 1][x - 1].type == "Water") counter++;
-        if (this.mapArray[y - 1][x - 1].type == "Water") counter++;
+
+      if (this.mapArray[y][x].userData.type != "OCEAN") {
+
+        if (this.mapArray[y + 1][x].userData.type === "OCEAN") counter++;
+        if (this.mapArray[y - 1][x].userData.type === "OCEAN") counter++;
+        if (this.mapArray[y][x + 1].userData.type === "OCEAN") counter++;
+        if (this.mapArray[y][x - 1].userData.type === "OCEAN") counter++;
+        if (this.mapArray[y + 1][x - 1].userData.type === "OCEAN") counter++;
+        if (this.mapArray[y - 1][x - 1].userData.type === "OCEAN") counter++;
+
         if (counter > 4) {
-          this.mapArray[y][x].type = "Water"
+          this.mapArray[y][x].userData.type = "OCEAN"
           this.mapArray[y][x].material.color = ocean;
           this.mapArray[y][x].position.y = -2;
         }
       }
 
       counter = 0;
-      if (this.mapArray[y][x].type != "Land") {
-        if (this.mapArray[y + 1][x].type == "Land") counter++;
-        if (this.mapArray[y - 1][x].type == "Land") counter++;
-        if (this.mapArray[y][x + 1].type == "Land") counter++;
-        if (this.mapArray[y][x - 1].type == "Land") counter++;
-        if (this.mapArray[y + 1][x - 1].type == "Land") counter++;
-        if (this.mapArray[y - 1][x - 1].type == "Land") counter++;
+
+      if (this.mapArray[y][x].userData.type != "GRASSLAND") {
+
+        if (this.mapArray[y + 1][x].userData.type == "GRASSLAND") counter++;
+        if (this.mapArray[y - 1][x].userData.type == "GRASSLAND") counter++;
+        if (this.mapArray[y][x + 1].userData.type == "GRASSLAND") counter++;
+        if (this.mapArray[y][x - 1].userData.type == "GRASSLAND") counter++;
+        if (this.mapArray[y + 1][x - 1].userData.type == "GRASSLAND") counter++;
+        if (this.mapArray[y - 1][x - 1].userData.type == "GRASSLAND") counter++;
+
         if (counter > 4) {
-          this.mapArray[y][x].type = "Land";
+          this.mapArray[y][x].userData.type = "GRASSLAND";
           this.mapArray[y][x].position.y = 0;
           this.mapArray[y][x].material.color = new THREE.Color(`rgb(0%,70%,0%)`);
         }
@@ -176,13 +180,11 @@ Map.prototype.layer3 = function () {
 
 Map.prototype.layer4 = function () {
 
-  for (var y = 0; y <= this.mapHeight; y++) {
-    for (var x = 0; x <= this.mapWidth; x++) {
+  for (var y = 0; y < this.mapHeight; y++) {
+    for (var x = 0; x < this.mapWidth; x++) {
 
-      if (this.mapArray[y][x].type == "Land") {
-        // this.mapArray[y][x].addSprite("copper");
-        // this.mapArray[y][x].addYield("science");
-      }
+      // this.world.utils.addSprite(this, this.mapArray[y][x], 'science');
+      // this.world.utils.addSprite(this, this.mapArray[y][x], 'gold');
 
     }
   }

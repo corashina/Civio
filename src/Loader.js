@@ -25,7 +25,7 @@ Loader.prototype.loadModels = function () {
 
   const models = {}
 
-  this.gltfloader.load('./assets/models/astronaut/astronaut.gltf', gltf => models['astronaut'] = gltf);
+  this.gltfloader.load('../assets/models/astronaut/astronaut.gltf', gltf => models['astronaut'] = gltf);
 
   return models;
 
@@ -35,12 +35,16 @@ Loader.prototype.loadTextures = function () {
 
   const textures = {}
 
-  this.textureloader.load('../assets/units/warrior.png', image => textures['warrior'] = image);
   this.textureloader.load('../assets/yields/science.png', image => textures['science'] = image);
   this.textureloader.load('../assets/yields/faith.png', image => textures['faith'] = image);
   this.textureloader.load('../assets/yields/gold.png', image => textures['gold'] = image);
   this.textureloader.load('../assets/yields/culture.png', image => textures['culture'] = image);
+  this.textureloader.load('../assets/yields/food.png', image => textures['food'] = image);
+  this.textureloader.load('../assets/yields/production.png', image => textures['production'] = image);
+
   this.textureloader.load('../assets/sprites/wheat.png', image => textures['wheat'] = image);
+
+  this.textureloader.load('../assets/units/warrior.png', image => textures['warrior'] = image);
 
   this.textureloader.load('./assets/ui/waternormals.jpg', function (texture) {
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
