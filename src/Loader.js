@@ -26,6 +26,7 @@ Loader.prototype.loadModels = function () {
   const models = {}
 
   this.gltfloader.load('../assets/models/astronaut/astronaut.gltf', gltf => models['astronaut'] = gltf);
+  this.gltfloader.load('../assets/models/mountain/mountain.gltf', gltf => models['mountain'] = gltf);
 
   return models;
 

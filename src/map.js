@@ -5,15 +5,14 @@ import SimplexNoise from 'simplex-noise';
 const ocean = new THREE.Color(0x0f5e9c);
 const snow = new THREE.Color(0xfffafa);
 
-
 class Map { constructor(world, hexlength) { this.constructor(world, hexlength) } }
 
 Map.prototype.constructor = function (world, hexlength) {
 
   this.world = world;
 
-  this.hexlength = hexlength;
-  this.hexheight = this.hexlength * Math.sin(Math.PI / 3) / Math.sin(Math.PI / 2);
+  this.hexlength = this.world.hexlength;
+  this.hexheight = this.world.hexheight;
 
   this.hex = new THREE.Shape();
   this.hex.moveTo(0, 0);
@@ -26,9 +25,16 @@ Map.prototype.constructor = function (world, hexlength) {
 
   this.geometry = new THREE.ShapeGeometry(this.hex);
   this.geometry.rotateX(-Math.PI / 2);
-
   // Todo change shape to get rid of Y rotation
   this.geometry.rotateY(-Math.PI / 2);
+
+
+  this.hillsGeometry = new THREE.CylinderGeometry(0, 10, 0.1, 6, 3);
+  this.hillsGeometry.verticesNeedUpdate = true;
+  this.hillsGeometry.vertices[0].y = 20;
+  this.hillsGeometry.vertices[8].y = 20;
+  this.hillsGeometry.vertices[10].y = 2;
+  this.hillsGeometry.vertices[12].y = 2;
 
   this.mapWidth = 60;
   this.mapHeight = 34;
@@ -58,6 +64,7 @@ Map.prototype.newTile = function () {
 
   let tile = new THREE.Mesh(this.geometry, this.material);
   tile.receiveShadow = true;
+  tile.castShadow = true;
   tile.userData = {
     world: this.world,
     map: this,
@@ -98,14 +105,15 @@ Map.prototype.layer1 = function () {
       let distanceY = Math.abs(this.mapHeight / 2 - y) / (this.mapHeight * 0.01);
 
       if (m > 70) {
-        tile.userData.type = "TERRAIN_GRASS_MOUNTAIN";
+        tile.userData.terrain = "TERRAIN_GRASS_MOUNTAIN";
+        this.world.utils.addObject(tile, 'mountain');
         tile.material.color = new THREE.Color(`rgb(0%,${m}%,0%)`);
       } else if (m < 55 || distanceX > 40 || distanceY > 40) {
-        tile.userData.type = "OCEAN";
+        tile.userData.terrain = "OCEAN";
         tile.position.y = -2;
         tile.material.color = ocean;
       } else {
-        tile.userData.type = "GRASSLAND"
+        tile.userData.terrain = "GRASSLAND"
         tile.position.y = 0;
         tile.material.color = new THREE.Color(`rgb(0%,${m}%,0%)`);
       }
@@ -140,17 +148,17 @@ Map.prototype.layer3 = function () {
 
       var counter = 0;
 
-      if (this.mapArray[y][x].userData.type != "OCEAN") {
+      if (this.mapArray[y][x].userData.terrain != "OCEAN") {
 
-        if (this.mapArray[y + 1][x].userData.type === "OCEAN") counter++;
-        if (this.mapArray[y - 1][x].userData.type === "OCEAN") counter++;
-        if (this.mapArray[y][x + 1].userData.type === "OCEAN") counter++;
-        if (this.mapArray[y][x - 1].userData.type === "OCEAN") counter++;
-        if (this.mapArray[y + 1][x - 1].userData.type === "OCEAN") counter++;
-        if (this.mapArray[y - 1][x - 1].userData.type === "OCEAN") counter++;
+        if (this.mapArray[y + 1][x].userData.terrain === "OCEAN") counter++;
+        if (this.mapArray[y - 1][x].userData.terrain === "OCEAN") counter++;
+        if (this.mapArray[y][x + 1].userData.terrain === "OCEAN") counter++;
+        if (this.mapArray[y][x - 1].userData.terrain === "OCEAN") counter++;
+        if (this.mapArray[y + 1][x - 1].userData.terrain === "OCEAN") counter++;
+        if (this.mapArray[y - 1][x - 1].userData.terrain === "OCEAN") counter++;
 
         if (counter > 4) {
-          this.mapArray[y][x].userData.type = "OCEAN"
+          this.mapArray[y][x].userData.terrain = "OCEAN"
           this.mapArray[y][x].material.color = ocean;
           this.mapArray[y][x].position.y = -2;
         }
@@ -158,17 +166,17 @@ Map.prototype.layer3 = function () {
 
       counter = 0;
 
-      if (this.mapArray[y][x].userData.type != "GRASSLAND") {
+      if (this.mapArray[y][x].userData.terrain != "GRASSLAND") {
 
-        if (this.mapArray[y + 1][x].userData.type == "GRASSLAND") counter++;
-        if (this.mapArray[y - 1][x].userData.type == "GRASSLAND") counter++;
-        if (this.mapArray[y][x + 1].userData.type == "GRASSLAND") counter++;
-        if (this.mapArray[y][x - 1].userData.type == "GRASSLAND") counter++;
-        if (this.mapArray[y + 1][x - 1].userData.type == "GRASSLAND") counter++;
-        if (this.mapArray[y - 1][x - 1].userData.type == "GRASSLAND") counter++;
+        if (this.mapArray[y + 1][x].userData.terrain == "GRASSLAND") counter++;
+        if (this.mapArray[y - 1][x].userData.terrain == "GRASSLAND") counter++;
+        if (this.mapArray[y][x + 1].userData.terrain == "GRASSLAND") counter++;
+        if (this.mapArray[y][x - 1].userData.terrain == "GRASSLAND") counter++;
+        if (this.mapArray[y + 1][x - 1].userData.terrain == "GRASSLAND") counter++;
+        if (this.mapArray[y - 1][x - 1].userData.terrain == "GRASSLAND") counter++;
 
         if (counter > 4) {
-          this.mapArray[y][x].userData.type = "GRASSLAND";
+          this.mapArray[y][x].userData.terrain = "GRASSLAND";
           this.mapArray[y][x].position.y = 0;
           this.mapArray[y][x].material.color = new THREE.Color(`rgb(0%,70%,0%)`);
         }

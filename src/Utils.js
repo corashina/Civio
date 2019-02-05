@@ -52,11 +52,19 @@ Utils.prototype.addSprite = function (map, tile, name) {
 
 }
 
-Utils.prototype.center = function (object, tile) {
+Utils.prototype.center = function (object) {
 
-  object.position.copy(tile.position);
-  object.position.x += tile.map.hexheight;
-  object.position.z += tile.map.hexlength / 2;
+  object.position.x += this.world.hexheight;
+  object.position.z += this.world.hexlength / 2;
+
+}
+
+Utils.prototype.addObject = function (hex, name) {
+
+  let object = this.world.loader.models[name].scene.clone();
+  object.position.copy(hex.position);
+  this.center(object)
+  this.world.scene.add(object);
 
 }
 

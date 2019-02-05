@@ -7,7 +7,6 @@ import Input from './Input';
 import Map from './Map';
 import Grid from './Grid';
 import UI from './UI';
-import Light from './Light';
 
 
 class App {
@@ -20,6 +19,7 @@ App.prototype.constructor = function () {
 
   // Scene
   this.scene = new THREE.Scene();
+  this.scene.add(new THREE.HemisphereLight(0xffffff));
 
   this.stats = new Stats();
   this.stats.showPanel(0);
@@ -37,13 +37,14 @@ App.prototype.constructor = function () {
   this.clock = new THREE.Clock();
   this.mixers = [];
 
-  this.utils = new Utils(this);
-  this.map = new Map(this, 10);
-  this.io = new Input(this);
-  this.interface = new UI(this);
-  this.grid = new Grid(this);
+  this.hexlength = 10;
+  this.hexheight = this.hexlength * Math.sin(Math.PI / 3) / Math.sin(Math.PI / 2);
 
-  this.light = new Light(this);
+  this.utils = new Utils(this);
+  this.map = new Map(this);
+  this.grid = new Grid(this);
+  this.interface = new UI(this);
+  this.io = new Input(this);
 
   // var tooltip = new Tooltip('Hello\nxD');
   // tooltip.mesh.position.set(0, 10, 0);

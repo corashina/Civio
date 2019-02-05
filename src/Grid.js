@@ -31,7 +31,7 @@ Grid.prototype.constructor = function (world) {
     }
   }
   this.mesh = new THREE.Mesh(this.geometry,
-    new THREE.MeshBasicMaterial({ color: 0x1e1e1e, depthTest: false, depthWrite: false }));
+    new THREE.MeshBasicMaterial({ color: 0x1e1e1e, depthTest: false }));
 
   this.mesh.position.x += this.world.map.hexheight;
   this.mesh.position.z += this.world.map.hexlength / 2;
