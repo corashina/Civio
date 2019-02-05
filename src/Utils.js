@@ -52,7 +52,7 @@ Utils.prototype.addSprite = function (map, tile, name) {
 
 }
 
-Utils.prototype.centerHex = function (object, tile) {
+Utils.prototype.center = function (object, tile) {
 
   object.position.copy(tile.position);
   object.position.x += tile.map.hexheight;

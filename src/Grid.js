@@ -6,36 +6,35 @@ Grid.prototype.constructor = function (world) {
 
   this.world = world;
 
-  this.geometry = new THREE.Shape();
-  this.geometry.moveTo(0, 0);
-  this.geometry.lineTo(-this.world.map.hexlength / 2, this.world.map.hexheight);
-  this.geometry.lineTo(0, this.world.map.hexheight * 2);
-  this.geometry.lineTo(this.world.map.hexlength, this.world.map.hexheight * 2);
-  this.geometry.lineTo(this.world.map.hexlength * 1.5, this.world.map.hexheight);
-  this.geometry.lineTo(this.world.map.hexlength, 0);
-  this.geometry.lineTo(0, 0);
+  this.geometry = new THREE.Geometry();
 
-  this.line = new THREE.Line(
-    new THREE.BufferGeometry().setFromPoints(this.geometry.getPoints()),
-    new THREE.LineBasicMaterial({ color: 0x000000, depthTest: false, depthWrite: false, transparent: true, opacity: 0.05 }));
+  this.hexGeometry = new THREE.RingGeometry(9.9, 10, 6);
+  this.hexGeometry.rotateX(-Math.PI / 2);
+  this.hexGeometry.rotateY(Math.PI / 2)
 
-  this.line.rotation.set(-Math.PI / 2, 0, -Math.PI / 2)
+  this.hexMesh = new THREE.Mesh(this.hexGeometry);
 
-  this.mesh = new THREE.Group();
+  const width = this.world.map.mapWidth * this.world.map.hexheight;
+  const height = this.world.map.mapHeight * this.world.map.hexlength;
+  const hexlength = this.world.map.hexlength;
+  const hexheight = this.world.map.hexheight;
 
   for (var y = 0; y < this.world.map.mapHeight; y++) {
     for (var x = 0; x < this.world.map.mapWidth; x++) {
 
-      this.line = this.line.clone();
-      this.line.position.set(
-        x * this.world.map.hexheight * 2 - (this.world.map.hexheight * this.world.map.mapWidth),
-        0,
-        y * this.world.map.hexlength * 1.5 - (this.world.map.hexlength * this.world.map.mapHeight));
-      this.line.position.x += y % 2 == 0 ? this.world.map.hexheight : 0;
+      this.hex = this.hexMesh.clone();
+      this.hex.position.set(x * hexheight * 2 - width, 0, y * hexlength * 1.5 - height);
+      if (y % 2 == 0) this.hex.position.x += hexheight;
+      this.hex.updateMatrix();
+      this.geometry.merge(this.hex.geometry, this.hex.matrix);
 
-      this.mesh.add(this.line);
     }
   }
+  this.mesh = new THREE.Mesh(this.geometry,
+    new THREE.MeshBasicMaterial({ color: 0x1e1e1e, depthTest: false, depthWrite: false }));
+
+  this.mesh.position.x += this.world.map.hexheight;
+  this.mesh.position.z += this.world.map.hexlength / 2;
 
   this.world.map.grid = this.mesh;
   this.world.scene.add(this.mesh);
