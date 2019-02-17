@@ -69,7 +69,7 @@ UI.prototype.constructor = function (world) {
   this.gold.position.set(-window.innerWidth / 2 + this.iconSize * 11, window.innerHeight / 2 - this.iconSize / 2, 1);
 
   // Left bottom
-  this.left_bottom = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.world.loader.textures['wheat'] }));
+  this.left_bottom = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.world.loader.textures['food'] }));
   this.left_bottom.center.set(0.0, 0.0);
   this.left_bottom.scale.set(175, 175, 1);
   this.scene.add(this.left_bottom);

@@ -46,10 +46,6 @@ App.prototype.constructor = function () {
   this.interface = new UI(this);
   this.io = new Input(this);
 
-  // var tooltip = new Tooltip('Hello\nxD');
-  // tooltip.mesh.position.set(0, 10, 0);
-  // this.scene.add(tooltip.mesh);
-
   // Camera
   this.camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
   this.camera.position.set(0, 200, -100);

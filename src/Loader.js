@@ -43,9 +43,7 @@ Loader.prototype.loadTextures = function () {
   this.textureloader.load('../assets/yields/food.png', image => textures['food'] = image);
   this.textureloader.load('../assets/yields/production.png', image => textures['production'] = image);
 
-  this.textureloader.load('../assets/sprites/wheat.png', image => textures['wheat'] = image);
-
-  this.textureloader.load('../assets/units/warrior.png', image => textures['warrior'] = image);
+  this.textureloader.load('../assets/yields/food.png', image => textures['food'] = image);
 
   this.textureloader.load('./assets/ui/waternormals.jpg', function (texture) {
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
